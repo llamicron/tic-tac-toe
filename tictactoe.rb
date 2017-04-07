@@ -10,9 +10,6 @@ class Game
       [" ", " ", " "],
       [" ", " ", " "]
     ]
-    # @row1 = Array.new(3, " ")
-    # @row2 = Array.new(3, " ")
-    # @row3 = Array.new(3, " ")
   end
 
   public
@@ -23,7 +20,14 @@ class Game
     until win do
       clear
       puts "You are X, the bot is O"
-      puts draw_board
+      draw_board
+
+      # If the final play wins the game, the board will be full.
+      # The `win` called above will catch that and not let this be triggered
+      if board_full
+        puts "Tie"
+        abort
+      end
 
       if turn == "player"
         player_turn
@@ -36,6 +40,16 @@ class Game
 
   end
 
+  # This is just for testin'
+  def fill
+    @board = [
+      ["X", "X", "X"],
+      ["X", "X", "X"],
+      ["X", "X", "X"]
+    ]
+    true
+  end
+
   private
 
   def clear
@@ -43,13 +57,14 @@ class Game
   end
 
   def draw_board
-    return Terminal::Table.new do |t|
+    table = Terminal::Table.new do |t|
       t.add_row @board[0]
       t.add_separator
       t.add_row @board[1]
       t.add_separator
       t.add_row @board[2]
     end
+    puts table
   end
 
   def available(move)
@@ -59,6 +74,15 @@ class Game
     end
     # It's not available
     return false
+  end
+
+  def board_full
+    @board.each do |row|
+      if row.include? " "
+        return false
+      end
+    end
+    return true
   end
 
   def get_move
@@ -105,7 +129,26 @@ class Game
   end
 
   def win
-    false
+    # horizontal win
+    @board.each do |row|
+      if row.all? {|x| x == row[0]} and !row.include? " "
+        puts "#{row[0]} wins"
+        draw_board
+        abort
+      end
+    end
+    # Vertical win (way harder to test for)
+    @board.count.times do |x|
+      if !cell_empty?(@board[0][x])
+        if @board[0][x] == @board[1][x] and @board[0][x] == @board[2][x]
+          puts "#{@board[0][x]} wins"
+          draw_board
+          abort
+        end
+      end
+    end
+
+    return false
   end
 
   def starting_player
@@ -114,6 +157,15 @@ class Game
     end
     return "bot"
   end
+
+  def cell_empty?(cell)
+    if cell == " "
+      return true
+    end
+    return false
+  end
+
+  public
 
 end
 
