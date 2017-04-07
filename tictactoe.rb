@@ -1,4 +1,5 @@
 require 'terminal-table'
+require_relative "bot.rb"
 
 class Game
 
@@ -10,6 +11,7 @@ class Game
       [" ", " ", " "],
       [" ", " ", " "]
     ]
+    @bot = Bot.new
   end
 
   public
@@ -125,7 +127,7 @@ class Game
   end
 
   def bot_turn
-    true
+    @bot.move(board)
   end
 
   def win
