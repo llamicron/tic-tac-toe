@@ -13,15 +13,6 @@ class Board
     ]
   end
 
-  # This is just for testin'
-  def fill
-    @board = [
-      ["X", "X", "X"],
-      ["X", "X", "X"],
-      ["X", "X", "X"]
-    ]
-    true
-  end
 
   def draw
     table = Terminal::Table.new do |t|
@@ -31,7 +22,7 @@ class Board
       t.add_separator
       t.add_row @board[2]
     end
-    puts table
+    return table
   end
 
   def available?(move)
@@ -67,15 +58,12 @@ class Board
         return false
       end
     end
-    puts "Tie"
-    # Draw the board, not draw the game
-    draw
-    abort
+    true
   end
 
-  def vertical_win
+  def vertical_win?
     @board.count.times do |x|
-      if !cell_empty?(@board[0][x])
+      if cell({'row' => 0, 'column' => x}) != " "
         if @board[0][x] == @board[1][x] and @board[0][x] == @board[2][x]
           winner = @board[0][x]
           return winner
@@ -85,7 +73,7 @@ class Board
     return false
   end
 
-  def horizontal_win
+  def horizontal_win?
     @board.each do |row|
       if row.all? {|x| x == row[0]} and !row.include? " "
         winner = row[0]
@@ -95,7 +83,7 @@ class Board
     return false
   end
 
-  def diagonal_win
+  def diagonal_win?
     # Negative diagonal win (up-left to down-right)
     if @board[0][0] != " "
       if @board[0][0] == @board[1][1] and @board[1][1] == @board[2][2]
@@ -118,40 +106,110 @@ class Board
   def victory(winner)
     puts "#{winner} wins"
     puts "----------------"
-    draw
-    abort
+    puts draw
+    true
   end
 
+  # This method is just a wrapper that checks all win conditions
   def win
     # horizontal win
-    winner = horizontal_win
+    winner = horizontal_win?
     if winner
       victory(winner)
+      return winner
     end
 
     # Vertical win (way harder to test for)
-    winner = vertical_win
+    winner = vertical_win?
     if winner
       victory(winner)
+      return winner
     end
 
     # Diagonal win
-    winner = diagonal_win
+    winner = diagonal_win?
     if winner
       victory(winner)
+      return winner
     end
 
     # If the board is full and there are no declared winners
-    full?
-
+    if full?
+      puts "Tie"
+      puts draw
+    end
     return false
   end
 
-  def cell_empty?(cell)
-    if cell == " "
+  def clear
+    @board = [
+      [" ", " ", " "],
+      [" ", " ", " "],
+      [" ", " ", " "]
+    ]
+  end
+
+  def cell(move)
+    @board[move['row']][move['column']]
+  end
+
+  # These methods are just for testin'
+  def set_vertical_win(player="X")
+    @board = [
+      ["#{player}", " ", " "],
+      ["#{player}", " ", " "],
+      ["#{player}", " ", " "]
+    ]
+  end
+
+  def set_horizontal_win(player="X")
+    @board = [
+      ["#{player}", "#{player}", "#{player}"],
+      [" ", " ", " "],
+      [" ", " ", " "]
+    ]
+  end
+
+  def set_diagonal_win_top_left(player="X")
+    @board = [
+      ["#{player}", " ", " "],
+      [" ", "#{player}", " "],
+      [" ", " ", "#{player}"]
+    ]
+  end
+
+  def set_diagonal_win_top_right(player="X")
+    @board = [
+      [" ", " ", "#{player}"],
+      [" ", "#{player}", " "],
+      ["#{player}", " ", " "]
+    ]
+  end
+
+  def fill(winner="X")
+    if winner == "tie"
+      @board = [
+        ["X", "O", "X"],
+        ["X", "O", "O"],
+        ["O", "X", "X"],
+      ]
       return true
     end
-    return false
+    @board = [
+      ["#{winner}", "#{winner}", "#{winner}"],
+      ["#{winner}", "#{winner}", "#{winner}"],
+      ["#{winner}", "#{winner}", "#{winner}"]
+    ]
+    true
+  end
+
+  def board_empty?
+    @board.each do |row|
+      if row.include? "X" or row.include? "O"
+        return false
+      end
+    end
+    true
   end
 
 end

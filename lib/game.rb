@@ -18,7 +18,7 @@ class Game
     until @board.win do
       clear
       puts "You are X, the bot is O"
-      @board.draw
+      puts @board.draw
 
       if turn == "player"
         player_turn
@@ -58,7 +58,7 @@ class Game
 
   def player_turn
     move = get_move
-
+    
     # lots of arrays here lmao
     @board.confirm(move)
   end
@@ -75,6 +75,3 @@ class Game
   end
 
 end
-
-game = Game.new
-game.play
