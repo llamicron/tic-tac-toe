@@ -11,7 +11,7 @@ describe Bot do
     it "chooses a move and confirms it" do
       @board.clear
       expect(@board.board_empty?).to be true
-      @bot.move(@board)
+      @bot.confirm_move(@board)
       expect(@board.board_empty?).to be false
     end
   end

@@ -7,7 +7,7 @@ class Game
 
   def initialize
     @board = Board.new
-    @bot = Bot.new
+    @bot = Bot.new(@board)
   end
 
   public
@@ -63,7 +63,7 @@ class Game
   end
 
   def bot_turn
-    @bot.move(@board)
+    @bot.confirm_move
   end
 
   def random_player

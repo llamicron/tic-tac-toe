@@ -24,6 +24,9 @@ class Board
   end
 
   def available?(move)
+    if !move['row'] or !move['column']
+      return false
+    end
     if @board[move["row"]][move["column"]] == " "
       # It is available
       return true
