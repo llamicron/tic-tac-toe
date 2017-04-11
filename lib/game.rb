@@ -13,17 +13,18 @@ class Game
   public
 
   def play
-    turn = starting_player
+    turn = random_player
 
     until @board.win do
       clear
       puts "You are X, the bot is O"
       puts @board.draw
 
-      if turn == "player"
+      case turn
+      when "player"
         player_turn
         turn = "bot"
-      else
+      when "bot"
         bot_turn
         turn = "player"
       end
@@ -58,8 +59,6 @@ class Game
 
   def player_turn
     move = get_move
-    
-    # lots of arrays here lmao
     @board.confirm(move)
   end
 
@@ -67,7 +66,7 @@ class Game
     @bot.move(@board)
   end
 
-  def starting_player
+  def random_player
     if rand(1..2) == 1
       return "player"
     end

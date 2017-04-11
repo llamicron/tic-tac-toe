@@ -47,6 +47,7 @@ class Board
   end
 
   def confirm(move, player="X")
+    # Lots of arrays here lmao
     @board[move["row"]][move["column"]] = player
     true
   end
