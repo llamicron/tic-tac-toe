@@ -1,5 +1,4 @@
 require 'terminal-table'
-require 'rainbow'
 
 class Board
 
