@@ -215,4 +215,15 @@ class Board
     true
   end
 
+  def empty_corner?
+    corners = [
+      [0, 0], [0, 2], [2, 0], [2, 2]
+    ]
+    corners.each do |corner|
+      if @board[corner[0]][corner[1]] == " "
+        return true
+      end
+    end
+  end
+
 end

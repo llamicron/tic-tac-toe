@@ -63,7 +63,7 @@ class Game
   end
 
   def bot_turn
-    @bot.confirm_move
+    @bot.choose_move
   end
 
   def random_player
