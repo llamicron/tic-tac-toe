@@ -193,7 +193,7 @@ describe Board do
     context "when there is no winner" do
       it "returns false" do
         @board.fill("tie")
-        capture_stdout { expect(@board.win).to be false }
+        capture_stdout { expect(@board.win).to eq("tie") }
       end
     end
   end

@@ -13,7 +13,6 @@ class Board
     ]
   end
 
-
   def draw
     table = Terminal::Table.new do |t|
       t.add_row @board[0]
@@ -134,9 +133,10 @@ class Board
     end
 
     # If the board is full and there are no declared winners
+
     if full?
-      puts "Tie"
-      puts draw
+      victory("Nobody")
+      return "tie"
     end
     return false
   end
